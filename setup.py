@@ -1,0 +1,16 @@
+from os import environ
+from setuptools import setup, find_packages
+
+setup(
+    name = 'dex.py',
+    version = '0.0.1',
+    license = 'MIT',
+    author = 'kiki7000',
+    author_email = 'devkiki7000@gmail.com',
+    description = 'discord command handler using regex',
+    long_description = open('README.md').read(),
+    url = 'https://github.com/kiki7000/dex.py',
+    packages = find_packages(),
+    install_requires = open('requirements.txt').readlines(),
+    python_requires = '>=3.6'
+)
