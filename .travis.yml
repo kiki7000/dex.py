@@ -1,0 +1,10 @@
+language: python
+deploy:
+  provider: pypi
+  username: __token__
+  password:
+    secure: iZoz5NfPQ0EN8Ryz+tQ2S25wNM/e2HW3HX5XNPmiAS/Q/WbchXgjXablA6ZsTS79DMyiybig12T8maqg9cH2ARnrYrDatrXh2Wk37VkmXyOW3W1cPUojUyKiczWOkLeB01D19bnnGmoh1DVog6cIeufYXtFn16yTYOv7oW24Ca1429zGAHm4ow01c534fDbyTKio9sYrN57Q0TekIAMP4WMHIt0IiJhC2pqLBEFTJKPpA0CdrPBt3FaDDIvgCPhv7evf6f5IAnjVe4fzxaNPGuU4JcI/M3e7nq+mTOkBBsMMslLbTjY0JV1brevrXzYt9XS10J4+iWGjbRVMy7BL4ucg6flgvlzxLWy2yyMqVbCDvL0/ZiOEW27BlotKavtJOznN3rrphQTdWLkz59uHJrepOOowNFQGib7tkGVXp3I62aT0dtqNZP0F4DeHOBvxFlqY4ycxRTzr7Gdn1DhDlOx3ZBK221ueCMF+g/ftjjwjYgziSNWw31ffCOYzcuZsQ1H58Sv+9FycsckcsYs8YDfqOj67Xh2fsWHMWMo8sT9DxTlELDXn4O194yE0B/FncpeDyBMXAWiQ+ZScufLPQm0q+iJGeJaUiBIWI6+VbrRPWyKNg/WPvUp/QIbU95laOwye7pr/xaFLuJEfmhexrUk9B1T7WzW1jTJBkNbmEMw=
+  distributions: sdist bdist_wheel
+  on:
+    branch: master
+  skip_existing: true
