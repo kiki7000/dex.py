@@ -1,4 +1,5 @@
 language: python
+script: true
 deploy:
   provider: pypi
   username: kiki7000
