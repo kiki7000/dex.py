@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'dex.py',
-    version = environ['TRAVIS_TAG'].lstrip('v') if environ['TRAVIS'] == 'true' else environ['VERSION_NUMBER'],
+    version = '0.0.2', # environ['TRAVIS_TAG'].lstrip('v') if environ['TRAVIS'] == 'true' else environ['VERSION_NUMBER'],
     license = 'MIT',
     author = 'kiki7000',
     author_email = 'devkiki7000@gmail.com',
