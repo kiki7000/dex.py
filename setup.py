@@ -9,6 +9,7 @@ setup(
     author_email = 'devkiki7000@gmail.com',
     description = 'discord command handler using regex',
     long_description = open('README.md').read(),
+    long_description_content_type = 'text/markdown',
     url = 'https://github.com/kiki7000/dex.py',
     packages = find_packages(),
     install_requires = open('requirements.txt').readlines(),
