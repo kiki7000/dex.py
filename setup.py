@@ -1,9 +1,11 @@
 from os import environ
 from setuptools import setup, find_packages
 
+from discordrex import __version__ as version
+
 setup(
     name = 'dex.py',
-    version = '0.0.2', # environ['TRAVIS_TAG'].lstrip('v') if environ['TRAVIS'] == 'true' else environ['VERSION_NUMBER'],
+    version = version,
     license = 'MIT',
     author = 'kiki7000',
     author_email = 'devkiki7000@gmail.com',
