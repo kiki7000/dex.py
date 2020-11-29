@@ -1,13 +1,14 @@
+from datetime import datetime
+from recommonmark.parser import CommonMarkParser
+
 from os.path import abspath
 from sys import path
 
 path.insert(0, abspath('.'))
 path.insert(0, abspath('..'))
+path.insert(0, abspath('../../'))
 
-from datetime import datetime
-from recommonmark.parser import CommonMarkParser
-
-from discordrex import __name__ as name, __version__ as version, __author__ as author, __license__ as license
+from discordex import __name__ as name, __version__ as version, __author__ as author, __license__ as license
 
 # Configuration file for the Sphinx documentation builder.
 #
@@ -18,12 +19,11 @@ from discordrex import __name__ as name, __version__ as version, __author__ as a
 
 # -- Project information -----------------------------------------------------
 
-project = 'discordrex'
+project = name
 copyright = f'{datetime.today().year}, {author}'
 
 # The full version, including alpha/beta/rc tags
 release = version
-html_favicon = 'favicon.ico'
 
 # -- General configuration ---------------------------------------------------
 
@@ -35,6 +35,7 @@ extensions = [
     'sphinx.ext.githubpages',
     'sphinx_rtd_theme',
     'sphinx.ext.napoleon',
+    'sphinx.ext.coverage',
     'sphinx.ext.doctest'
 ]
 

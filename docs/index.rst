@@ -1,8 +1,8 @@
-dex.py(discordrex)
-==================================
+.. include:: pages/index.rst
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   node
+   pages/node
+   pages/bot

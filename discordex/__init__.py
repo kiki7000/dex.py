@@ -1,3 +1,5 @@
+from .bot import DexBot
+
 __name__ = 'dex.py'
 __version__ = '0.0.3.1'
 
