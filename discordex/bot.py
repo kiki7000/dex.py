@@ -3,22 +3,58 @@ from asyncio import sleep
 from typing import List, Callable, Union
 from time import time as get_time
 
+from .base import BaseExtension
+
 
 class DexBot(AutoShardedClient):
-    r"""The Bot class
+    """The Bot class
 
     Parameters
     ----------
     command_prefix: str
         the bot's prefix. None if none given
+
+    blacklist: List[:class:`int`]
+        the IDs of users in the blacklist
+
+    whitelist: List[:class:`int`]
+        the IDs of users in the whitelist
+
+    ownerlist: List[:class:`int`]
+        the IDs of users in the ownerlist
+
+    allow_bots: :class:`bool`
+        Allow bots using the bot
+
+    allow_privates: :class:`bool`
+        Allow private channels
+
+    space_after_prefix: :class:`bool`
+        If there is a space after prefix
     """
 
-    _blackList: List[User] = []
+    _blacklist: List[int] = []
+    _whitelist: List[int] = []
+    _ownerlist: List[int] = []
+
+    _allow_bots: bool = False
+    _allow_privates: bool = True
+    _space_after_prefix: bool = False
+
+    _extensions: List[BaseExtension] = []
 
     _start_time: int = 0
 
-    def __init__(self, command_prefix: str = None, **kwargs):
-        self.command_prefix = command_prefix
+    def __init__(self, command_prefix: str, **kwargs):
+        self.command_prefix = command_prefix.strip(' ')
+
+        self.blacklist = kwargs.get('blacklist')
+        self.whitelist = kwargs.get('whitelist')
+        self.ownerlist = kwargs.get('ownerlist')
+
+        self._allow_bots = kwargs.get('allow_bots')
+        self._allow_privates = kwargs.get('allow_privates')
+        self._space_after_prefix = kwargs.get('space_after_prefix')
         super().__init__(**kwargs)
 
     def run(self, token: str, *args, **kwargs) -> None:
@@ -64,11 +100,37 @@ class DexBot(AutoShardedClient):
         return get_time() - self._start_time
 
     @property
-    def blackList(self):
-        """List[:class:`discord.User`]: The bot's blacklist. If the black listed user uses the command, it raises the :class:`discordex.errors.BlacklistedUser`
-        """
-        return self._blackList
+    def blacklist(self):
+        """List[:class:`int`]:
+            The bot's blacklist
 
-    @blackList.setter
-    def blackList(self, value: List[User]):
-        self._blackList = value
+            If the black listed user uses the command, it raises the :class:`discordex.errors.BlackListedUser`
+        """
+        return self._blacklist
+
+    @blacklist.setter
+    def blacklist(self, value: List[int]):
+        self._blacklist = value
+
+    @property
+    def whitelist(self):
+        """List[:class:`int`]:
+            The bot's whitelist
+
+            If the not whitelisted user uses the command, it raises the :class:`discordex.errors.NotWhiteListedUser` (Only when whitelist is enabled)
+        """
+        return self._whitelist
+
+    @whitelist.setter
+    def whitelist(self, value: List[int]):
+        self._whitelist = value
+
+    @property
+    def ownerlist(self, value: List[int]):
+        """List[:class:`int`]: The bot's ownerlist. Does nothing
+        """
+        return self._ownerlist
+
+    @ownerlist.setter
+    def ownerlist(self, value: List[int]):
+        self._ownerlist = value

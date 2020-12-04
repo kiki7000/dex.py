@@ -1,7 +1,7 @@
-Node
+BaseCommand
 ======================================
 
-.. automodule:: discordex.utils.node
+.. automodule:: discordex.base.command
     :members:
     :undoc-members:
     :show-inheritance:

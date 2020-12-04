@@ -10,7 +10,13 @@ class BeforeCommandException(DexException):
     pass
 
 
-class BlacklistedUser(BeforeCommandException):
+class BlackListedUser(BeforeCommandException):
     """Exception that's thrown when a blacklisted user uses the bot
+    """
+    pass
+
+
+class NotWhiteListedUser(BeforeCommandException):
+    """Exception that's thrown when a not whitelisted user uses the bot (Only when whitelist is enabled)
     """
     pass

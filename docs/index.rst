@@ -6,3 +6,5 @@
 
    pages/node
    pages/bot
+   pages/base/basecommand
+   pages/base/baseextension

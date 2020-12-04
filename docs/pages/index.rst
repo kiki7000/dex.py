@@ -2,6 +2,7 @@ dex.py(discordex)
 ==================================
 
 dex.py is discord.py's extension.
+[This](https://github.com/kiki7000/dex.py) is the github repository
 
 Features
 --------
@@ -17,9 +18,9 @@ Example
     from discordex import DexBot
     bot = DexBot(command_prefix = '!')
 
-    @bot.command(r'안녕 <str:name>')
-    async def hello(ctx, name: str):
-        await ctx.send(f'ㅎㅇ {name}')
+    @bot.command(r'hello <str:name>')
+    async def hello(ctx):
+        await ctx.send(f'hi {ctx.args.name}')
 
     bot.run(token)
     
