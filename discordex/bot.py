@@ -2,8 +2,11 @@ from discord import AutoShardedClient, User, Status, Game, Activity
 from asyncio import sleep
 from typing import List, Callable, Union
 from time import time as get_time
+from re import sub
 
 from .base import BaseExtension
+from .commandsmanager import CommandsManager
+from .utils import Node
 
 
 class DexBot(AutoShardedClient):
@@ -57,12 +60,14 @@ class DexBot(AutoShardedClient):
         self._space_after_prefix = kwargs.get('space_after_prefix')
         super().__init__(**kwargs)
 
+        self.cmds = CommandsManager(self)
+
     def run(self, token: str, *args, **kwargs) -> None:
         """Starts the bot
 
         Parameters
         ----------
-        token: str
+        token: :class:`str`
             The bot's token
         """
 
@@ -76,7 +81,7 @@ class DexBot(AutoShardedClient):
         ----------
         presences: List[Union[:class:`discord.Activity`, :class:`Callable`]]
             The presence list
-        wait: int
+        wait: :class:`int`
             time to change the presence
         status: :class:`discord.Status`
             the bot's status
@@ -89,6 +94,30 @@ class DexBot(AutoShardedClient):
                 presence = _presence() if isinstance(_presence, Callable) else _presence
                 await self.change_presence(status=status, activity=presence, **kwargs)
                 await sleep(wait)
+
+    def parse_content(self, content: str, include_prefix: bool = True) -> Node:
+        """Parse the message content
+
+        Parameters
+        ----------
+        content: :class:`str`
+            Message Content
+        include_prefix: :class:`bool`
+            Whether the message content includes a prefix
+        """
+
+        content = sub(r' +', ' ', (content[len(self.command_prefix):].strip(' ') if include_prefix else content.strip(' ')))
+        cmd = content.split()[0].lower()
+
+        try:
+            args = content[len(cmd) + 1:].split()
+        except IndexError:
+            args = []
+
+        return Node({
+            'cmd': cmd,
+            'args': args
+        })
 
     @property
     def uptime(self) -> Union[float, None]:

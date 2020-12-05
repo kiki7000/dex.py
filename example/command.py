@@ -24,7 +24,7 @@ def setup(bot):
     cmd.use(asdf, check=True)  # bot.use(cmd, asdf, check = True)
     bot.add_command(r'hello <str:name>', cmd, aliases=[r'sans <str:name>'], bot_permission=['kick_members'])
 
-
+r'hello <longstr:desc>'
 # or
 @bot.command(r'hello <str:name>', aliases=[r'sans <str:name>'], bot_permission=['kick_members'])
 @bot.use_ext()

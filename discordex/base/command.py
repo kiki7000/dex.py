@@ -1,9 +1,10 @@
 from discord import AutoShardedClient
 
 from traceback import print_exc
-from typing import Any
+from typing import Any, List
 
 from ..context import Context
+from .extension import BaseExtension
 
 
 class BaseCommand:
@@ -20,10 +21,33 @@ class BaseCommand:
     ----------
     bot: :class:`discordex.DexBot`
         The bot class
+    extensions: List[:class:`.BaseExtension`]
+        The extensions
+
+    main_cmd: :class:`str`
+        The command form
+    aliases_cmd: List[:class:`str`]
+        Aliases of the cmd
+
+    guild_cooltime: int
+        The cooltime of the guild (default 0)
+    channel_cooltime: int
+        The cooltime of the channel (default 0)
+    user_cooltime: int
+        The cooltime of the user (default 0)
     """
 
     def __init__(self, bot: AutoShardedClient):
         self.bot = bot
+
+        self.extensions: BaseExtension = []
+
+        self.main_cmd: str = None
+        self.aliases_cmd: List[str] = []
+
+        self.guild_cooltime: int = 0
+        self.channel_cooltime: int = 0
+        self.user_cooltime: int = 0
 
     async def before_execute(self, ctx: Context) -> None:
         """The function to run before excute
