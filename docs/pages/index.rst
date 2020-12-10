@@ -2,7 +2,7 @@ dex.py(discordex)
 ==================================
 
 dex.py is discord.py's extension.
-[This](https://github.com/kiki7000/dex.py) is the github repository
+`This <https://github.com/kiki7000/dex.py>`_ is the github repository
 
 Features
 --------

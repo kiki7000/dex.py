@@ -1,9 +1,9 @@
-from typing import Deque, Union, Iterable
-from collections import deque
-from discord import AutoShardedClient
+from typing import Union, Iterable, Dict, Callable, Tuple, Optional, List
+from discord import AutoShardedClient, Message
 from re import compile, MULTILINE
 
 from .base import BaseCommand
+from .utils import Node
 
 
 class CommandsManager:
@@ -20,7 +20,7 @@ class CommandsManager:
         The bot class
     """
 
-    _cmds: Deque[BaseCommand] = deque([])
+    _cmds: Dict[str, BaseCommand] = {}
 
     def __init__(self, bot: AutoShardedClient):
         self.bot = bot
@@ -67,31 +67,87 @@ class CommandsManager:
         if self._get_typestr_regex('longstr') in parsed_cmd_string.args and parsed_cmd_string.args[-1] != self._get_typestr_regex('longstr'):
             return False
 
-        for _i in range(len(parsed_cmd_string.args)):
-            arg = parsed_cmd_string.args[_i]
+        varnames = []
 
+        for _i in range(len(parsed_cmd_string.args)):
             if _i == len(parsed_cmd_string.args) - 1:
                 regex = compile(f'{"|".join(map(self._get_typestr_regex, stringtypelist.keys()))}')
             else:
-                regex = compile(f'{"|".join(map(self._get_typestr_regex, stringtypelist.keys()[:-1]))}')
+                regex = compile(f'{"|".join(map(self._get_typestr_regex, list(stringtypelist.keys())[:-1]))}')
 
-            if not regex.match(arg):
+            arg = parsed_cmd_string.args[_i]
+            string_type = regex.match(arg)
+
+            if not string_type:
                 return False
 
             try:
-                type = arg[1:].split(':')[0]
-                varname = arg[2 + len(type): -1]
+                _type = arg[1:].split(':')[0]
+                varname = arg[2 + len(_type): -1]
             except IndexError:
                 return False
 
-            if not stringtypelist[type](arg):
+            if _type == 'longstr':
+                contarg = ' '.join(parsed_content.args[_i:])
+            else:
+                contarg = parsed_content.args[_i]
+
+            if not stringtypelist[_type](contarg):
                 return False
+
+            if varname in varnames:
+                return False
+            varnames.append(varname)
 
         return True
 
-    def search(self, content: str) -> Union[BaseCommand, None]:
+    def get_nargs(self, message: Message, cmd_string: str) -> Union[Node, bool]:
+        """Get the nargs
+        :returns: The nargs (False if the cmd_string doesn't matches the content)
+
+        Parameters
+        ----------
+        message: :class:`discord.Message`
+            The message
+        cmd_string: :class:`str`
+            The cmd string
+        """
+
+        action = {
+            'user': lambda string: self.bot.get_user(int(string)),
+            'channel': lambda string: self.bot.get_channel(int(string)),
+            'role': lambda string: message.guild.get_role(int(string))
+        }
+
+        content = message.content
+        if not self.cmd_string_content_match(content, cmd_string):
+            return False
+
+        res = Node()
+
+        parsed_cmd_string = self.bot.parse_content(cmd_string, False)
+        parsed_content = self.bot.parse_content(content)
+
+        for _i in range(len(parsed_cmd_string.args)):
+            arg = parsed_cmd_string.args[_i]
+            _type = arg[1:].split(':')[0]
+            varname = arg[2 + len(_type): -1]
+
+            if _type == 'longstr':
+                contarg = ' '.join(parsed_content.args[_i:])
+            else:
+                contarg = parsed_content.args[_i]
+
+            if _type in action:
+                res[varname] = action[_type](contarg)
+            else:
+                res[varname] = contarg
+
+        return res
+
+    def search(self, content: str) -> Optional[Tuple[str, Union[BaseCommand, Callable]]]:
         """Searches the command by message content
-        :returns: the command (if none was found, None)
+        :returns tuple: the command string and command (if none was found, None)
 
         Parameters
         ----------
@@ -101,41 +157,38 @@ class CommandsManager:
 
         content = content.lower().strip()
 
-        for cmd in self._cmds:
-            if self.cmd_string_content_match(content, cmd.main_cmd) or len(filter(lambda alias: self.cmd_string_content_match(content, alias), cmd.aliases_cmd)) > 0:
-                return cmd
+        for cmd_string in self._cmds:
+            if self.cmd_string_content_match(content, cmd_string):
+                return cmd_string, self._cmds[cmd_string]
 
         return None
 
-    def add(self, command: BaseCommand) -> BaseCommand:
+    def add(self, cmd_string: str, command: Union[BaseCommand, Callable]) -> Union[BaseCommand, Callable]:
         """Adds the command into the list
         :returns: the command to add
 
         Parameters
         ----------
-        command: :class:`.base.BaseCommand`
+        command: Union[:class:`.base.BaseCommand`, Callable]
             The command to add
 
         Raises
         ------
         :exc:`TypeError`
-            Command didn't inherit BaseCommand
+            Command didn't inherit BaseCommand (if Command is class)
         """
 
-        if not isinstance(command, BaseCommand):
+        if not callable(command) and not isinstance(command, BaseCommand):
             raise TypeError('Command should inherit BaseCommand')
 
-        if command in self._cmds:
-            return command
-
-        self._cmds.append(command)
+        self._cmds[cmd_string] = command
         return command
 
-    def __len__(self) -> int:
-        return len(self._cmds)
-
-    def __list__(self) -> list:
+    def __dict__(self) -> int:
         return self._cmds
 
-    def __iter__(self) -> Iterable:
-        return self._cmds
+    def __iter__(self) -> Iterable[str]:
+        return iter(self._cmds.keys())
+
+    def __str__(self) -> str:
+        return str(self._cmds)

@@ -1,5 +1,4 @@
 from typing import Any
-from ..context import Context
 
 
 class BaseExtension:
@@ -16,12 +15,12 @@ class BaseExtension:
     def __init__(self, **kwargs):
         self.name = kwargs.get('name') or self.__name__
 
-    async def before_execute(self, ctx: Context) -> None:
+    async def before_execute(self, ctx) -> bool:
         """The function to run before excute
 
         If two or more extensions are added, they are executed in the order they were added
 
-        :returns bool: executes the command if returns True
+        :returns bool: executes the command if returns True or None
 
         Parameters
         ----------
@@ -30,7 +29,7 @@ class BaseExtension:
         """
         pass
 
-    async def after_execute(self, ctx: Context, returns: Any) -> None:
+    async def after_execute(self, ctx, returns: Any) -> None:
         """The function to run after excute
 
         If two or more extensions are added, they are executed in the order they were added

@@ -16,7 +16,7 @@ class Node(object):
         dictionary to convert into object
     """
 
-    def __init__(self, dictionary: dict):
+    def __init__(self, dictionary: dict = {}):
         for key in dictionary:
             if not isinstance(key, str):
                 continue
@@ -27,7 +27,7 @@ class Node(object):
             else:
                 self[key] = Node(val)
 
-        self.do = {
+        self._do = {
             'keys': lambda s: list(s.__dict__.keys()),
             'values': lambda s: list(s.__dict__.values()),
             'items': lambda s: list(s.__dict__.items()),
@@ -35,8 +35,8 @@ class Node(object):
         }
 
     def __getattr__(self, name: str) -> Any:
-        if name in self.do:
-            return self.do[name](self)
+        if name in self._do:
+            return self._do[name](self)
         if name not in self.__dict__:
             return None
 
@@ -46,8 +46,8 @@ class Node(object):
         self.__dict__[name] = value
 
     def __getitem__(self, name: str) -> Any:
-        if name in self.do:
-            return self.do[name](self)
+        if name in self._do:
+            return self._do[name](self)
         if name not in self.__dict__:
             return None
 

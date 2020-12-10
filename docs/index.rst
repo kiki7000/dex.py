@@ -2,15 +2,20 @@
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
 
-   pages/node
    pages/bot
    pages/commandsmanager
 
 .. toctree::
    :maxdepth: 2
-   :caption: Base:
+   :caption: Base
 
    pages/base/basecommand
    pages/base/baseextension
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Utils
+
+   pages/node

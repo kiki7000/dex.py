@@ -1,10 +1,13 @@
-from discord import AutoShardedClient, User, Status, Game, Activity
+from discord import AutoShardedClient, User, Status, Game, Activity, Message
 from asyncio import sleep
-from typing import List, Callable, Union
+from typing import List, Callable, Union, Optional
 from time import time as get_time
 from re import sub
+from functools import wraps
+from inspect import isclass
 
-from .base import BaseExtension
+from .context import Context
+from .base import BaseExtension, BaseCommand
 from .commandsmanager import CommandsManager
 from .utils import Node
 
@@ -31,9 +34,6 @@ class DexBot(AutoShardedClient):
 
     allow_privates: :class:`bool`
         Allow private channels
-
-    space_after_prefix: :class:`bool`
-        If there is a space after prefix
     """
 
     _blacklist: List[int] = []
@@ -42,7 +42,6 @@ class DexBot(AutoShardedClient):
 
     _allow_bots: bool = False
     _allow_privates: bool = True
-    _space_after_prefix: bool = False
 
     _extensions: List[BaseExtension] = []
 
@@ -57,7 +56,6 @@ class DexBot(AutoShardedClient):
 
         self._allow_bots = kwargs.get('allow_bots')
         self._allow_privates = kwargs.get('allow_privates')
-        self._space_after_prefix = kwargs.get('space_after_prefix')
         super().__init__(**kwargs)
 
         self.cmds = CommandsManager(self)
@@ -118,6 +116,86 @@ class DexBot(AutoShardedClient):
             'cmd': cmd,
             'args': args
         })
+
+    def command(self, main_cmd: str, aliases: List[str] = [], **kwargs) -> Callable:
+        """
+        Decorate version or :func:`add_command`
+        """
+
+        def decorate(cmd: Union[BaseCommand, Callable]) -> Union[BaseCommand, Callable]:
+            self.add_command(cmd, main_cmd, aliases, **kwargs)
+            return cmd
+
+        return decorate
+
+    def add_command(self, cmd: Union[BaseCommand, Callable], main_cmd: str, aliases: List[str] = [], **kwargs) -> Union[BaseCommand, Callable]:
+        """
+        Initialize the command and append the command into the list
+
+        Parameters
+        ----------
+        bot: :class:`discordex.DexBot`
+            The bot class
+
+        main_cmd: :class:`str`
+            The command form
+        aliases: List[:class:`str`]
+            Aliases of the cmd
+
+        guild_cooltime: int
+            The cooltime of the guild (default 0)
+        channel_cooltime: int
+            The cooltime of the channel (default 0)
+        user_cooltime: int
+            The cooltime of the user (default 0)
+        role_cooltime: int
+            The cooltime of the role (default 0)
+        """
+        for cmd_string in aliases + [main_cmd]:
+            if isclass(cmd):
+                self.cmds.add(cmd_string, cmd(self, **kwargs))
+            else:
+                self.cmds.add(cmd_string, cmd)
+
+        return cmd
+
+    async def on_message(self, message: Message) -> None:
+        """:func:`process_cmd`'s alias
+        """
+
+        await self.process_cmd(message)
+        return None
+
+    async def process_cmd(self, message: Message) -> Optional[Message]:
+        parsed_content = self.parse_content(message.content)
+
+        ctx = Context()
+        ctx.cmd = parsed_content.cmd
+        ctx.args = parsed_content.args
+
+        ctx.message = message
+        ctx.content = message.content
+        ctx.bot = self
+
+        ctx.channel = message.channel
+        ctx.author = message.author
+        ctx.guild = message.guild
+
+        ctx.send = message.channel.send
+
+        cmd = self.cmds.search(message.content)
+        if not cmd:
+            return None
+        ctx.command = cmd[1]
+        cmd_string = cmd[0]
+
+        ctx.nargs = self.cmds.get_nargs(message, cmd_string)
+
+        if callable(ctx.command):
+            await ctx.command(ctx)
+        else:
+            await ctx.command.use_command(ctx)
+        return message
 
     @property
     def uptime(self) -> Union[float, None]:
