@@ -4,7 +4,7 @@ from typing import Any
 class BaseExtension:
     """Basic form of extension
 
-    Every extensions should inherit this
+    Every extension should inherit this
 
     Parameters
     ----------
@@ -16,11 +16,11 @@ class BaseExtension:
         self.name = kwargs.get('name') or self.__name__
 
     async def before_execute(self, ctx) -> bool:
-        """The function to run before excute
+        """The function to run before executing
 
         If two or more extensions are added, they are executed in the order they were added
 
-        :returns bool: executes the command if returns True or None
+        :returns bool: whether to execute
 
         Parameters
         ----------
@@ -30,7 +30,7 @@ class BaseExtension:
         pass
 
     async def after_execute(self, ctx, returns: Any) -> None:
-        """The function to run after excute
+        """The function to run after executing
 
         If two or more extensions are added, they are executed in the order they were added
 

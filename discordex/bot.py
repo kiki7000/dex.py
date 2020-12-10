@@ -126,7 +126,7 @@ class DexBot(AutoShardedClient):
 
     def command(self, main_cmd: str, aliases: List[str] = [], **kwargs) -> Callable:
         """
-        Decorate version or :func:`add_command`
+        Decorate version of :func:`add_command`
         """
 
         def decorate(cmd: Union[BaseCommand, Callable]) -> Union[BaseCommand, Callable]:
@@ -230,7 +230,7 @@ class DexBot(AutoShardedClient):
         """List[:class:`int`]:
             The bot's blacklist
 
-            If the black listed user uses the command, it raises the :class:`discordex.errors.BlackListedUser`
+            If the blacklisted user uses the command, it raises the :class:`discordex.errors.BlackListedUser`
         """
         return self._blacklist
 

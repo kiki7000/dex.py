@@ -4,25 +4,25 @@ class DexException(Exception):
     pass
 
 
-class BlackListedUser(BeforeCommandException):
+class BlackListedUser:
     """Exception that's thrown when a blacklisted user uses the bot
     """
     pass
 
 
-class NotWhiteListedUser(BeforeCommandException):
+class NotWhiteListedUser:
     """Exception that's thrown when a not whitelisted user uses the bot (Only when whitelist is enabled)
     """
     pass
 
 
-class UserisBot(BeforeCommandException):
+class UserisBot:
     """Exception that's thrown when a bot uses the command
     """
     pass
 
 
-class PrivateChannel(BeforeCommandException):
+class PrivateChannel:
     """Exception that's thrown when the command is not used at text channel
     """
     pass

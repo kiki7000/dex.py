@@ -60,11 +60,11 @@ class BaseCommand:
         return ext
 
     async def before_execute(self, ctx) -> bool:
-        """The function to run before excute
+        """The function to run before executing
 
         This function is executed before other extensions
 
-        :returns bool: executes the command if returns True
+        :returns bool: whether to execute
 
         Parameters
         ----------
@@ -88,7 +88,7 @@ class BaseCommand:
         pass
 
     async def after_execute(self, ctx, returns: Any) -> None:
-        """The function to run after excute
+        """The function to run after executing
 
         This function is executed before other extensions
 
@@ -114,7 +114,7 @@ class BaseCommand:
         print_exc()
 
     async def use_command(self, ctx) -> None:
-        """The function that runs the extension, executes
+        """The function that runs the extension and executes
 
         .. warning::
             You can customize this but the problem caused by customizing this can't be solved

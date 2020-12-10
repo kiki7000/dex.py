@@ -3,7 +3,7 @@ from json import load, dump
 
 
 class Node(object):
-    """Class to make dict use like object
+    """Creates class attributes from dict
 
     Example
 
