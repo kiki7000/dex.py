@@ -11,6 +11,11 @@ from .base import BaseExtension, BaseCommand
 from .commandsmanager import CommandsManager
 from .utils import Node
 
+from .errors import (
+    NotWhiteListedUser, BlackListedUser,
+    PrivateChannel, UserisBot
+)
+
 
 class DexBot(AutoShardedClient):
     """The Bot class
@@ -42,6 +47,8 @@ class DexBot(AutoShardedClient):
 
     _allow_bots: bool = False
     _allow_privates: bool = True
+
+    _base_errorhandler: Callable = None
 
     _extensions: List[BaseExtension] = []
 
@@ -168,16 +175,16 @@ class DexBot(AutoShardedClient):
 
     async def process_cmd(self, message: Message) -> Optional[Message]:
         if message.author.id in self.blacklist:
-            return
+            raise BlackListedUser('User is blacklisted')
 
         if self.whitelist and message.author.id not in self.whitelist:
-            return
+            raise NotWhiteListedUser('User is not whitelisted')
 
         if message.author.bot and not self._allow_bots:
-            return
+            raise UserisBot('User is bot')
 
         if str(message.channel.type) != 'text' and not self._allow_privates:
-            return
+            raise PrivateChannel('Command used in private channel')
 
         parsed_content = self.parse_content(message.content)
 
@@ -219,7 +226,7 @@ class DexBot(AutoShardedClient):
         return get_time() - self._start_time
 
     @property
-    def blacklist(self):
+    def blacklist(self) -> List[int]:
         """List[:class:`int`]:
             The bot's blacklist
 
@@ -232,7 +239,7 @@ class DexBot(AutoShardedClient):
         self._blacklist = value
 
     @property
-    def whitelist(self):
+    def whitelist(self) -> List[int]:
         """List[:class:`int`]:
             The bot's whitelist
 
@@ -245,7 +252,7 @@ class DexBot(AutoShardedClient):
         self._whitelist = value
 
     @property
-    def ownerlist(self, value: List[int]):
+    def ownerlist(self):
         """List[:class:`int`]: The bot's ownerlist. Does nothing
         """
         return self._ownerlist
@@ -253,3 +260,13 @@ class DexBot(AutoShardedClient):
     @ownerlist.setter
     def ownerlist(self, value: List[int]):
         self._ownerlist = value
+
+    @property
+    def base_errorhandler(self) -> Callable:
+        """List[:class:`int`]: The bot's base errorhandler. This is executed later than the command's errorhandler
+        """
+        return self._base_errorhandler
+
+    @base_errorhandler.setter
+    def base_errorhandler(self, value: Callable):
+        self._base_errorhandler = value

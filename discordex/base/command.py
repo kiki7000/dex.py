@@ -137,6 +137,8 @@ class BaseCommand:
         try:
             returns = await self.execute(ctx)
         except Exception as e:
+            if self.bot.base_errorhandler:
+                await self.bot.base_errorhandler(ctx, e)
             await self.error_handler(ctx, e)
 
         await self.after_execute(ctx, returns)
