@@ -2,6 +2,9 @@ from typing import Union, Iterable, Dict, Callable, Tuple, Optional, List
 from discord import AutoShardedClient, Message
 from re import compile, MULTILINE
 
+from os import listdir
+from importlib import import_module
+
 from .base import BaseCommand
 from .utils import Node
 
@@ -163,12 +166,43 @@ class CommandsManager:
 
         return None
 
+    def gather(self, base_dir: str, sub_dir: bool = True, ignore: List[str] = ['__pycache__']) -> None:
+        """Search base_dir and add commands if found
+
+        Parameters
+        ----------
+        base_dir: str
+        sub_dir: bool
+            Whether to use sub_dir
+        """
+
+        def search_files(self, base: str) -> List[str]:
+            files = [[base + '/' + x, base] for x in list(filter(lambda x: str(x).endswith('.py') and str(x) not in self.ignore, listdir(base)))]
+            folders = list(filter(lambda x: '.' not in str(x) and str(x) not in self.ignore, listdir(base)))
+
+            for f in folders:
+                files.extend(self.search_files(base + '/' + str(f)))
+            return files
+
+        if not sub_dir:
+            files = [[self.command_dir + '/' + x, 'no category'] for x in list(filter(lambda x: str(x).endswith('.py') and str(x) not in self.ignore, listdir(self.command_dir)))]
+        else:
+            files = search_files('base')
+
+        files = map(import_module, files)
+        for module in files:
+            if 'setup' not in dir(module):
+                continue
+            module.setup(self.bot)
+
     def add(self, cmd_string: str, command: Union[BaseCommand, Callable]) -> Union[BaseCommand, Callable]:
         """Adds the command into the list
         :returns: the command to add
 
         Parameters
         ----------
+        cmd_string: str
+            The command string
         command: Union[:class:`.base.BaseCommand`, Callable]
             The command to add
 
@@ -184,7 +218,34 @@ class CommandsManager:
         self._cmds[cmd_string] = command
         return command
 
-    def __dict__(self) -> int:
+    def delete(self, cmd_string: str = None, command: Union[BaseCommand, Callable] = None) -> Optional[Union[BaseCommand, Callable]]:
+        """Deletes the command (Only one parameters are needed)
+        :returns: the command deleted
+
+        Parameters
+        ----------
+        cmd_string: str
+            The command string
+        command: Union[:class:`.base.BaseCommand`, Callable]
+            The command to add
+        """
+
+        if (cmd_string and command) or (not cmd_string and not command):
+            return None
+
+        if cmd_string:
+            if cmd_string not in self._cmds.keys():
+                return None
+            del self._cmds[cmd_string]
+
+        else:
+            if command not in self._cmds.values():
+                return None
+            for k, v in self._cmds.values():
+                if v == command:
+                    del self._cmds[k]
+
+    def __dict__(self) -> Dict[str, BaseCommand]:
         return self._cmds
 
     def __iter__(self) -> Iterable[str]:

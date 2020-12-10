@@ -167,6 +167,18 @@ class DexBot(AutoShardedClient):
         return None
 
     async def process_cmd(self, message: Message) -> Optional[Message]:
+        if message.author.id in self.blacklist:
+            return
+
+        if self.whitelist and message.author.id not in self.whitelist:
+            return
+
+        if message.author.bot and not self._allow_bots:
+            return
+
+        if str(message.channel.type) != 'text' and not self._allow_privates:
+            return
+
         parsed_content = self.parse_content(message.content)
 
         ctx = Context()

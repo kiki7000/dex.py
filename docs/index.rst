@@ -5,6 +5,7 @@
    :caption: Contents
 
    pages/bot
+   pages/context
    pages/commandsmanager
 
 .. toctree::
