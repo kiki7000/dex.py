@@ -174,6 +174,9 @@ class DexBot(AutoShardedClient):
         return None
 
     async def process_cmd(self, message: Message) -> Optional[Message]:
+        if not message.content.startswith(self.command_prefix):
+            return
+
         if message.author.id in self.blacklist:
             raise BlackListedUser('User is blacklisted')
 
@@ -186,7 +189,10 @@ class DexBot(AutoShardedClient):
         if str(message.channel.type) != 'text' and not self._allow_privates:
             raise PrivateChannel('Command used in private channel')
 
-        parsed_content = self.parse_content(message.content)
+        try:
+            parsed_content = self.parse_content(message.content)
+        except Exception:
+            return
 
         ctx = Context()
         ctx.cmd = parsed_content.cmd
