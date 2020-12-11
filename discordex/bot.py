@@ -57,12 +57,12 @@ class DexBot(AutoShardedClient):
     def __init__(self, command_prefix: str, **kwargs):
         self.command_prefix = command_prefix.strip(' ')
 
-        self.blacklist = kwargs.get('blacklist')
-        self.whitelist = kwargs.get('whitelist')
-        self.ownerlist = kwargs.get('ownerlist')
+        self.blacklist = kwargs.get('blacklist') or self._blacklist
+        self.whitelist = kwargs.get('whitelist') or self._whitelist
+        self.ownerlist = kwargs.get('ownerlist') or self._ownerlist
 
-        self._allow_bots = kwargs.get('allow_bots')
-        self._allow_privates = kwargs.get('allow_privates')
+        self._allow_bots = kwargs.get('allow_bots') or self._allow_bots
+        self._allow_privates = kwargs.get('allow_privates') or self._allow_privates
         super().__init__(**kwargs)
 
         self.cmds = CommandsManager(self)
