@@ -130,9 +130,9 @@ dmypy.json
 
 # test
 test.py
+test/
 
-
-# 이로님 ㅈㅅ
+# idea
 .IDEA
 .vscode
 .DS_Store
