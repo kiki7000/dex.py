@@ -1,2 +1,2 @@
-discord.py
-six
+discord.py>=1.6.0
+six>=1.15.0
