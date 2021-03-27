@@ -15,5 +15,5 @@ setup(
     url = 'https://github.com/kiki7000/dex.py',
     packages = find_packages(),
     install_requires = open('requirements.txt').readlines(),
-    python_requires = '>=3.6'
+    python_requires = '>=3.8'
 )
