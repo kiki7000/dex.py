@@ -5,5 +5,12 @@ title: "[Typo] "
 labels: typo
 ---
 
+## Typo type
+- [ ] Document
+- [ ] Markdowns or Templates
+
 ## Typo
-> Where is the typo? (line URL) (Multiple possible)
+> Where is the typo? (line, file github URL) (Multiple possible)
+
+## Check
+- [ ] Are you sure this is a typo?

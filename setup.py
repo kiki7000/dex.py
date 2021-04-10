@@ -1,17 +1,16 @@
-from os import environ
 from setuptools import setup, find_packages
 
 from discordex import (
     __version__ as version,
     __author__ as author,
-    __license__ as license,
+    __license__ as _license,
     __name__ as name,
 )
 
 setup(
     name=name,
     version=version,
-    license=license,
+    license=_license,
     author=author,
     author_email="devkiki7000@gmail.com",
     description="discord.py extension",

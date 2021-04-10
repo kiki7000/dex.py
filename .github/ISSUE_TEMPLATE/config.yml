@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask a question
+    url: https://github.com/koreanbots/koreanbots/discussions
+    about: Please ask questions at the discussions
