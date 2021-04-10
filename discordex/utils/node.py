@@ -28,10 +28,10 @@ class Node(object):
                 self[key] = Node(val)
 
         self._do = {
-            'keys': lambda s: list(s.__dict__.keys()),
-            'values': lambda s: list(s.__dict__.values()),
-            'items': lambda s: list(s.__dict__.items()),
-            'data': lambda s: s.__dict__
+            "keys": lambda s: list(s.__dict__.keys()),
+            "values": lambda s: list(s.__dict__.values()),
+            "items": lambda s: list(s.__dict__.items()),
+            "data": lambda s: s.__dict__,
         }
 
     def __getattr__(self, name: str) -> Any:
@@ -76,19 +76,14 @@ class File(Node):
         the file's encoding
     """
 
-    def __init__(self, filePath: str, encoding: str = 'utf-8', **kwargs):
-        with open(filePath, 'r', encoding='utf-8', **kwargs) as f:
+    def __init__(self, filePath: str, encoding: str = "utf-8", **kwargs):
+        with open(filePath, "r", encoding="utf-8", **kwargs) as f:
             dictionary = load(f)
         super().__init__(dictionary)
 
         self.filePath = filePath
 
-    def commit(
-        self,
-        encoding: str = 'utf-8',
-        ensure_ascii: bool = False,
-        **kwargs
-    ) -> None:
+    def commit(self, encoding: str = "utf-8", ensure_ascii: bool = False, **kwargs) -> None:
         """Saves the data into the file
 
         Parameters
@@ -96,5 +91,5 @@ class File(Node):
         encoding: str
             the file's encoding
         """
-        with open(self.filePath, 'w', encoding=encoding) as f:
-            dump(self.data, f, indent='\t', ensure_ascii=False)
+        with open(self.filePath, "w", encoding=encoding) as f:
+            dump(self.data, f, indent="\t", ensure_ascii=False)

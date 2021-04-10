@@ -12,9 +12,9 @@ from discordex.permissions import Permissions
 
 
 def _get_logger() -> Logger:
-    logger: Logger = getLogger('discordex')
+    logger: Logger = getLogger("discordex")
     logger.setLevel(INFO)
-    logger.addHandler(FileHandler('discordex.log'))
+    logger.addHandler(FileHandler("discordex.log"))
     return logger
 
 
@@ -41,13 +41,20 @@ class Dex:
 
     def __init__(self, bot: Union[Client, Bot], logger: Logger = _get_logger(), **kwargs):
         self.bot: Union[Client, Bot] = bot
-        self.extensions: List['extension.Extension'] = []
+        self.extensions: List["extension.Extension"] = []
 
         self._start_time: int = 0
 
         self.logger = logger
 
-    async def change_presence_loop(self, *, presences: List[Union[Activity, Callable]], wait: int = 60, status: Status = Status.online, **kwargs) -> None:
+    async def change_presence_loop(
+        self,
+        *,
+        presences: List[Union[Activity, Callable]],
+        wait: int = 60,
+        status: Status = Status.online,
+        **kwargs
+    ) -> None:
         """Changes the presence every few seconds
 
         Parameters
@@ -70,14 +77,15 @@ class Dex:
 
     @property
     def uptime(self) -> Union[float, None]:
-        """Union[:class:`float`, ``None``]: The uptime of the bot. ``None`` if the bot hasn't started
-        """
+        """Union[:class:`float`, ``None``]: The uptime of the bot. ``None`` if the bot hasn't started"""
 
         if not self._start_time:
             return None
         return get_time() - self._start_time
 
-    def add(self, extension: 'extension.Extension', permissions: Permissions = Permissions()) -> 'extension.Extension':
+    def add(
+        self, extension: "extension.Extension", permissions: Permissions = Permissions()
+    ) -> "extension.Extension":
         """Add the extension to the bot
 
         Parameters

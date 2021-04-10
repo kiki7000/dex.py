@@ -24,7 +24,7 @@ class Extension:
 
     def __init__(self, **kwargs):
         self.bot: Optional[Union[Client, Bot]] = None
-        self.dex: Optional['dex.Dex'] = None
+        self.dex: Optional["dex.Dex"] = None
 
         self._permissions: Permissions = Permissions()
 
@@ -46,10 +46,10 @@ class Extension:
         .. note::
             In default, it prints a LOG
         """
-        self.dex.logger.info('Exension loaded')
+        self.dex.logger.info("Exension loaded")
         pass
 
-    def _attach_dex(self, dex: 'dex.Dex', bot: Union[Client, Bot]):
+    def _attach_dex(self, dex: "dex.Dex", bot: Union[Client, Bot]):
         self.dex = dex
         self.bot = bot
         self.on_load()
