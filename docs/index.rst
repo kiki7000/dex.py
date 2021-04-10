@@ -11,9 +11,3 @@
 .. toctree::
    :maxdepth: 2
    :caption: Extensions
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Utils
-
-   pages/node

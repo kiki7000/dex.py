@@ -1,7 +1,0 @@
-Node
-======================================
-
-.. automodule:: discordex.utils.node
-    :members:
-    :undoc-members:
-    :show-inheritance:
