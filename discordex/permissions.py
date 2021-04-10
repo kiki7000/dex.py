@@ -47,12 +47,6 @@ class Permissions:
         .. note::
             If this is enabled this extension can use `on_guild_role_create`, `on_guild_role_delete`, `on_guild_role_updatee`.
 
-    extension_handle: :class:`bool`
-        If enabled, the extension can control the extensions
-
-        .. note::
-            If this is enabled this extension can use `on_ready`.
-
     shard_event_handle: :class:`bool`
         If enabled, the extension can be runned in events related in shard
 
@@ -80,7 +74,6 @@ class Permissions:
         self.user_event_handle: bool = kwargs.pop("user_event_handle", True)
         self.guild_event_handle: bool = kwargs.pop("guild_event_handle", True)
         self.role_event_handle: bool = kwargs.pop("role_event_handle", True)
-        self.extension_handle: bool = kwargs.pop("extension_handle", True)
         self.shard_event_handle: bool = kwargs.pop("shard_event_handle", True)
         self.socket_event_handle: bool = kwargs.pop("socket_event_handle", True)
         self.error_handle: bool = kwargs.pop("error_handle", False)
