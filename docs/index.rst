@@ -4,16 +4,13 @@
    :maxdepth: 2
    :caption: Contents
 
-   pages/bot
-   pages/context
-   pages/commandsmanager
+   pages/dex
+   pages/permissions
+   pages/extension
 
 .. toctree::
    :maxdepth: 2
-   :caption: Base
-
-   pages/base/basecommand
-   pages/base/baseextension
+   :caption: Extensions
 
 .. toctree::
    :maxdepth: 2

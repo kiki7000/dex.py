@@ -1,7 +1,7 @@
-BaseCommand
+Permissions
 ======================================
 
-.. automodule:: discordex.base.command
+.. automodule:: discordex.permissions
     :members:
     :undoc-members:
     :show-inheritance:

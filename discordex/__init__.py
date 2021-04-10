@@ -1,7 +1,9 @@
-from .bot import DexBot
+from .dex import Dex
+from .extension import Extension
+from .permissions import Permissions
 
 __name__ = 'dex.py'
-__version__ = '0.0.5.4'
+__version__ = '0.1'
 
-__author__ = 'kiki7000'
+__author__ = 'Team Kat'
 __license__ = 'MIT'

@@ -1,7 +1,7 @@
-DexBot
+Dex
 ======================================
 
-.. automodule:: discordex.bot
+.. automodule:: discordex.dex
     :members:
     :undoc-members:
     :show-inheritance:

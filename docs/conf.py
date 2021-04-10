@@ -8,7 +8,10 @@ path.insert(0, abspath('.'))
 path.insert(0, abspath('..'))
 path.insert(0, abspath('../../'))
 
-from discordex import __name__ as name, __version__ as version, __author__ as author, __license__ as license
+from discordex import (
+    __name__ as name, __version__ as version, __author__ as author,
+    __license__ as license
+)
 
 # Configuration file for the Sphinx documentation builder.
 #

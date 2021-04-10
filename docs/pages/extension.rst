@@ -1,7 +1,7 @@
-BaseExtension
+Extension
 ======================================
 
-.. automodule:: discordex.base.extension
+.. automodule:: discordex.extension
     :members:
     :undoc-members:
     :show-inheritance:
